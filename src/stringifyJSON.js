@@ -40,14 +40,24 @@ var stringifyJSON = function(obj) {
 
   }
 
+  if (obj === undefined) {
+    return "";
+  }
+
+  if (typeof obj === "function") {
+    return "";
+  }
+
   if (typeof obj === "object") {
 
     var str = "{";
 
     for (var thing in obj) {
-
-      str = str + stringifyJSON(thing) + ":" + stringifyJSON(obj[thing]) + ",";
-
+      if (obj[thing] === undefined || typeof obj[thing] === "function") {
+        str = str;
+      } else {
+        str = str + stringifyJSON(thing) + ":" + stringifyJSON(obj[thing]) + ",";
+      }
     }
 
     if (str.lastIndexOf(',') > -1 ) {
@@ -56,8 +66,6 @@ var stringifyJSON = function(obj) {
       return str + "}";
     }
   }
-
-
 
 
 };
