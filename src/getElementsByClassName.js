@@ -13,19 +13,32 @@ var getElementsByClassName = function(className){
 
   function checkClass(current, targetClass) {
 
-    //Checks current level for a match in the class list
-    for (var i = 0; i < current.classList.length; i++) {
-      if (current.classList[i] === targetClass){
-        // PROBLEM - push is not appending the actual element;
-        // instead, it is appending something that looks like 'body.targetClassName'
-        result.push(current);
+
+    // Need to first check if there is a classList for current element
+    if (current.classList) {
+
+      //Check current element for a match
+      for (var i = 0; i < current.classList.length; i++) {
+        if (current.classList[i] === targetClass){
+          result.push(current);
+        }
+      }
+    }
+
+    // Now check the children of the current element
+    var children = current.childNodes;
+
+    if (children.length > 0) {
+      for (var j = 0; j < children.length; j++) {
+        // run function recursively on the children
+        checkClass(children[j], targetClass);
       }
     }
   }
 
+  // initial function call
   checkClass(currentNode, className);
 
-  console.log(result);
   return result;
 
 };
