@@ -4,10 +4,31 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  // your code goes here
 
-  console.log(obj);
+  if ( Array.isArray(obj) ) {
+    var results = [];
+    for ( var i = 0; i < obj.length; i++ ) {
+      results.push(stringifyJSON(obj[i]));
+    }
+    return '[' + results.join(',') + ']';
+  }
+  if ( obj && typeof obj === "object" ) {
+    var results = [];
+    for ( var key in obj ) {
+      if (obj[key] === undefined || typeof obj[key] === "function") {
+        continue;
+      }
+      results.push(stringifyJSON(key) + ':' + stringifyJSON(obj[key]));
+    }
+    return '{' + results.join(',') + '}';
+  }
+  if ( typeof obj === "string" ) {
+    return '"'+obj+'"';
+  }
+  return ''+obj;
 
+  /*
+  // Charlie's original solution
   if (typeof obj === "string") {
     return '\"' + obj + '\"';
   }
@@ -66,6 +87,6 @@ var stringifyJSON = function(obj) {
       return str + "}";
     }
   }
-
+  */
 
 };
